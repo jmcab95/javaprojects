@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.consume.entity.Hashtag;
@@ -72,8 +73,8 @@ public class TweetApi {
 		return tweetService.getValidatedTweets();
 	}
 	
-	@GetMapping(value="/getNTopHashtag/{nTop}")
-	public List<HashtagNameOnly> getNTopHashtags(@PathVariable int nTop){
+	@GetMapping(value="/getNTopHashtag")
+	public List<HashtagNameOnly> getNTopHashtags(@RequestParam(defaultValue ="10") int nTop){
 		return hashtagService.readTopNHashtag(nTop);
 	}
 
