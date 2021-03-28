@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.consume.entity.Hashtag;
+import com.consume.entity.HashtagNameOnly;
 import com.consume.entity.Tweet;
 import com.consume.service.HashtagService;
 import com.consume.service.TweetService;
 
 @RestController
-@RequestMapping(value = "/dbOperations")
+@RequestMapping(value = "/TwitterRepository")
 public class TweetApi {
 
 	@Autowired
@@ -26,7 +28,7 @@ public class TweetApi {
 	@Autowired 
 	HashtagService hashtagService;
 
-	@GetMapping(value = "getTweet/{tweetId}")
+	@GetMapping(value = "/getTweet/{tweetId}")
 	public Tweet getOneTweet(@PathVariable long tweetId) {
 		Tweet tweet = null;
 
@@ -44,10 +46,6 @@ public class TweetApi {
 		return tweetService.readAll();
 	}
 
-	@PostMapping(value = "/createTweet")
-	public Tweet updateTweet(@RequestBody Tweet tweet) {
-		return tweetService.save(tweet);
-	}
 
 	@PatchMapping(value = "/validateTweet/{tweetId}")
 	public String validateTweet(@PathVariable long tweetId) {
@@ -59,24 +57,25 @@ public class TweetApi {
 			tweet = tweetOptional.get();
 			if (!tweet.isValidatedTweet()) {
 				tweetService.validateTweet(tweet.getId());
-				return "Tweet con id: " + tweet.getId() + " ha sido validado";
+				return "Tweet with id: " + tweet.getId() + " has just been validated";
 			} else {
-				return "Tweet con id: " + tweet.getId() + " ya está validado";
+				return "Tweet with id: " + tweet.getId() + " is already validated";
 			}
 		} else {
-			return "El tweet seleccionado no existe";
+			return "Selected Tweet does not exist";
 		}
 
 	}
 
-	@GetMapping(value = "/getValidatedTweets")
+	@GetMapping(value = "/getAllValidatedTweets")
 	public List<Tweet> getValidatedTweets() {
 		return tweetService.getValidatedTweets();
 	}
 	
-	@GetMapping(value="getAllHashtags")
-	public List<Hashtag> getAllHashtags(){
-		return hashtagService.readAll();
+	@GetMapping(value="/getNTopHashtag/{nTop}")
+	public List<HashtagNameOnly> getNTopHashtags(@PathVariable int nTop){
+		return hashtagService.readTopNHashtag(nTop);
 	}
+
 
 }

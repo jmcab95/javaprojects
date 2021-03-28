@@ -69,11 +69,10 @@ public class TwitterConsumingConfig {
 					}
 					
 					
-					System.out.println(hashtags.toString());
 					Tweet tweet = new Tweet(status.getUser().getName(), status.getText(),
 							status.getUser().getLocation(), status.getLang(), false,
 							status.getUser().getFollowersCount());
-					
+					tweet.setHashtags(hashtags);
 					
 					tweetService.save(tweet);
 

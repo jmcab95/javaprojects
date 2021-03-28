@@ -35,7 +35,7 @@ public class Tweet implements Serializable {
 	private boolean validatedTweet;
 	private int numberFollowers;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade= {CascadeType.MERGE,CascadeType.REFRESH}, orphanRemoval = true)
 	@JoinColumn(name = "tweetId")
 	private List<Hashtag> hashtags;
 	
