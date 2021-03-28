@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.consume.entity.Hashtag;
 import com.consume.entity.Tweet;
+import com.consume.service.HashtagService;
 import com.consume.service.TweetService;
 
 @RestController
@@ -21,6 +23,8 @@ public class TweetApi {
 
 	@Autowired
 	TweetService tweetService;
+	@Autowired 
+	HashtagService hashtagService;
 
 	@GetMapping(value = "getTweet/{tweetId}")
 	public Tweet getOneTweet(@PathVariable long tweetId) {
@@ -68,6 +72,11 @@ public class TweetApi {
 	@GetMapping(value = "/getValidatedTweets")
 	public List<Tweet> getValidatedTweets() {
 		return tweetService.getValidatedTweets();
+	}
+	
+	@GetMapping(value="getAllHashtags")
+	public List<Hashtag> getAllHashtags(){
+		return hashtagService.readAll();
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 
 import com.consume.entity.Hashtag;
 import com.consume.entity.Tweet;
+import com.consume.service.HashtagService;
 import com.consume.service.TweetService;
 
 import twitter4j.FilterQuery;
@@ -46,7 +47,7 @@ public class TwitterConsumingConfig {
 		this.twitterStream = twitterStream;
 	}
 
-	public void saveTweets(List<String> language, int numberFollowers, TweetService service) throws TwitterException {
+	public void saveTweets(List<String> language, int numberFollowers, TweetService tweetService, HashtagService hashtagService) throws TwitterException {
 
 		
 		this.twitterStream = new TwitterStreamFactory().getInstance();
@@ -59,18 +60,22 @@ public class TwitterConsumingConfig {
 				if (status.getUser().getFollowersCount() >= numberFollowers) {
 					
 					for (HashtagEntity hash : status.getHashtagEntities()) {
-						Hashtag hashEnt = new Hashtag(hash.getText());
+						
+						Hashtag tempHashtag = new Hashtag(hash.getText());
+						Hashtag hashEnt=hashtagService.save(tempHashtag);
 
 						hashtags.add(hashEnt);
 
 					}
+					
+					
 					System.out.println(hashtags.toString());
 					Tweet tweet = new Tweet(status.getUser().getName(), status.getText(),
 							status.getUser().getLocation(), status.getLang(), false,
 							status.getUser().getFollowersCount());
 					
 					
-					service.save(tweet);
+					tweetService.save(tweet);
 
 				}
 				

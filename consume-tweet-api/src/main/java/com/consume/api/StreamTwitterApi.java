@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 import com.consume.entity.Tweet;
+import com.consume.service.HashtagService;
 import com.consume.service.TweetService;
 import com.consume.twitter.TwitterConsumingConfig;
 
@@ -22,6 +23,8 @@ import com.consume.twitter.TwitterConsumingConfig;
 public class StreamTwitterApi {
 	@Autowired
 	TweetService tweetService;
+	@Autowired 
+	HashtagService hashtagService;
 	
 	Tweet tweet = new Tweet();
 	TwitterConsumingConfig twitterIni = new TwitterConsumingConfig();
@@ -35,7 +38,7 @@ public class StreamTwitterApi {
 			
 			twitterIni.createSession();
 		    try {
-				twitterIni.saveTweets(language, numberFollowers,tweetService);
+				twitterIni.saveTweets(language, numberFollowers,tweetService, hashtagService);
 			} catch (TwitterException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

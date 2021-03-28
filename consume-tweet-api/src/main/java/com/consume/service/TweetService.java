@@ -14,8 +14,6 @@ import com.consume.repository.TweetRepository;
 public class TweetService{
 @Autowired
 TweetRepository repository;
-@Autowired 
-HashtagRepository repositoryHashtag;
 
 public Tweet save(Tweet tweet) {
 	return repository.saveAndFlush(tweet);
